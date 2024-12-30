@@ -122,7 +122,10 @@ nrow(bad_drivers)
 ## Getting to Know the Data Frame 
 
 
-```{r echo=FALSE, out.width='100%'}
+```{r}
+#| echo: false
+#| out-width: 100%
+#| fig-align: center
 knitr::include_graphics('img/data-environment.png')
 ```
 
