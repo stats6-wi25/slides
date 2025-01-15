@@ -216,11 +216,11 @@ You should not copy paste code from my slides or from the internet.
 Part of learning to code is building up your muscle memory. 
 :::
 
-## tidyverse_style_guide
+## tidyverse style guide
 
 >canyoureadthissentence?
 
-## tidyverse_style_guide
+## tidyverse style guide
 
 :::: {.columns}
 
