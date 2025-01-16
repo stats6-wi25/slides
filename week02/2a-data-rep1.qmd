@@ -214,6 +214,14 @@ ggplot(babies, aes(x = bwt)) +
 
 :::
 
+## Binwidth
+
+```{r}
+
+ggplot(babies, aes(x = bwt)) +
+  geom_histogram(binwidth = 3)
+```
+
 ##
 
 ```{r}
