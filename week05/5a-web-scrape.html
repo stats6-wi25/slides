@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="5a-web-scrape_files/libs/clipboard/clipboard.min.js"></script>
+<script src="5a-web-scrape_files/libs/quarto-html/tabby.min.js"></script>
+<script src="5a-web-scrape_files/libs/quarto-html/popper.min.js"></script>
+<script src="5a-web-scrape_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="5a-web-scrape_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="5a-web-scrape_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="5a-web-scrape_files/libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.39">
+
+  <meta name="author" content="Dr.&nbsp;Mine Dogucu">
+  <title>Web scraping</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="5a-web-scrape_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="5a-web-scrape_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="5a-web-scrape_files/libs/revealjs/dist/theme/quarto-ac7baaa5c1d988da9bc8cef27684804c.css">
+  <link href="5a-web-scrape_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="5a-web-scrape_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="5a-web-scrape_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="5a-web-scrape_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="https://www.introdata.science/img/logo.png" data-background-position="50% 85%" data-background-size="5%" class="quarto-title-block center">
+  <h1 class="title">Web scraping</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Dr.&nbsp;Mine Dogucu 
+</div>
+</div>
+</div>
+
+</section>
+<section>
+<section id="a-brief-introduction-to-html-css" class="title-slide slide level1 center">
+<h1>A Brief Introduction to HTML &amp; CSS</h1>
+<p><strong>H</strong>yper<strong>t</strong>ext <strong>M</strong>arkup <strong>L</strong>anguage</p>
+<p><strong>C</strong>ascading <strong>S</strong>tyle <strong>S</strong>heets</p>
+</section>
+<section id="an-ugly-web-page" class="slide level2">
+<h2>An ugly web page</h2>
+
+<img data-src="img/ugly-website.png" class="quarto-figure quarto-figure-center r-stretch" width="907"></section>
+<section id="html-document-outline" class="slide level2">
+<h2>HTML document outline</h2>
+<center>
+<video width="80%" height="45%%" align="center" controls="">
+<source src="screencast/5-html-start.mp4" type="video/mp4">
+</video>
+</center>
+</section>
+<section id="paragraphs" class="slide level2">
+<h2>Paragraphs</h2>
+<center>
+<video width="80%" height="45%%" align="center" controls="">
+<source src="screencast/5-p-tag.mp4" type="video/mp4">
+</video>
+</center>
+</section>
+<section id="hyperlinks" class="slide level2">
+<h2>Hyperlinks</h2>
+<center>
+<video width="80%" height="45%%" align="center" controls="">
+<source src="screencast/5-a-tag.mp4" type="video/mp4">
+</video>
+</center>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p><code>&lt;a href="https://www.r-project.org/"&gt;R&lt;/a&gt;</code></p>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><code>&lt;a&gt; &lt;/a&gt;</code></p>
+</div><div class="column" style="width:50%;">
+<p>HTML tag</p>
+</div></div>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><code>href</code></p>
+</div><div class="column" style="width:50%;">
+<p>attribute (name)</p>
+</div></div>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><code>https://www.r-project.org/</code></p>
+</div><div class="column" style="width:50%;">
+<p>attribute (value)</p>
+</div></div>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><code>R</code></p>
+</div><div class="column" style="width:50%;">
+<p>content</p>
+</div></div>
+</div>
+</section>
+<section id="spans" class="slide level2">
+<h2>Spans</h2>
+<center>
+<video width="80%" height="45%%" align="center" controls="">
+<source src="screencast/5-span-tag.mp4" type="video/mp4">
+</video>
+</center>
+</section>
+<section id="styling" class="slide level2">
+<h2>Styling</h2>
+<center>
+<video width="80%" height="45%%" align="center" controls="">
+<source src="screencast/5-style-css.mp4" type="video/mp4">
+</video>
+</center>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+
+<img data-src="img/html-tree.jpeg" width="960" class="r-stretch"></section></section>
+<section>
+<section id="web-scraping" class="title-slide slide level1 center">
+<h1>Web Scraping</h1>
+
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(rvest)</span>
+<span id="cb1-2"><a href=""></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>rvest</code> package has several functions that help with web scraping.</p>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>robotstxt<span class="sc">::</span><span class="fu">paths_allowed</span>(<span class="st">"http://www.criterion.com"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>robotstxt<span class="sc">::</span><span class="fu">paths_allowed</span>(<span class="st">"http://www.facebook.com"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="what-we-see" class="slide level2">
+<h2>What we see</h2>
+
+<img data-src="img/criterion.png" class="quarto-figure quarto-figure-center r-stretch" width="630"></section>
+<section id="what-we-want" class="slide level2">
+<h2>What we want</h2>
+<p>The first five rows of the <code>.csv</code> file we would like to achieve.</p>
+
+<img data-src="img/criterion-csv.png" width="1286" class="r-stretch"></section>
+<section id="selector-gadget" class="slide level2">
+<h2>Selector Gadget</h2>
+<p><a href="https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb">Selector Gadget</a> extension can help us select CSS classes.</p>
+</section>
+<section id="we-should-use-.r-files-as-opposed-to-.qmd." class="slide level2">
+<h2>We should use <code>.R</code> files as opposed to <code>.qmd</code>.</h2>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p><a href="https://www.criterion.com/shop/browse/list?sort=spine_number">Criterion Collection</a> is a video distribution company that is known for “important movies”.</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://www.criterion.com/shop/browse/list?sort=spine_number"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<p>Even though it is hard to see all the data we want is stored in the object called <code>page</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>page</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html class="no-js" lang="en"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body class="criterion-collection page__storebrowsing default wildsand__b ...</code></pre>
+</div>
+</div>
+</section>
+<section id="scraping-spine-numbers" class="slide level2">
+<h2>Scraping Spine Numbers</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>page <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">".g-spine"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (1727)}
+ [1] &lt;th class="g-spine"&gt;Spine #&lt;/th&gt;
+ [2] &lt;td class="g-spine"&gt;\n\t\t1\n\t&lt;/td&gt;
+ [3] &lt;td class="g-spine"&gt;\n\t\t2\n\t&lt;/td&gt;
+ [4] &lt;td class="g-spine"&gt;\n\t\t3\n\t&lt;/td&gt;
+ [5] &lt;td class="g-spine"&gt;\n\t\t4\n\t&lt;/td&gt;
+ [6] &lt;td class="g-spine"&gt;\n\t\t5\n\t&lt;/td&gt;
+ [7] &lt;td class="g-spine"&gt;\n\t\t6\n\t&lt;/td&gt;
+ [8] &lt;td class="g-spine"&gt;\n\t\t7\n\t&lt;/td&gt;
+ [9] &lt;td class="g-spine"&gt;\n\t\t8\n\t&lt;/td&gt;
+[10] &lt;td class="g-spine"&gt;\n\t\t9\n\t&lt;/td&gt;
+[11] &lt;td class="g-spine"&gt;\n\t\t10\n\t&lt;/td&gt;
+[12] &lt;td class="g-spine"&gt;\n\t\t11\n\t&lt;/td&gt;
+[13] &lt;td class="g-spine"&gt;\n\t\t12\n\t&lt;/td&gt;
+[14] &lt;td class="g-spine"&gt;\n\t\t13\n\t&lt;/td&gt;
+[15] &lt;td class="g-spine"&gt;\n\t\t14\n\t&lt;/td&gt;
+[16] &lt;td class="g-spine"&gt;\n\t\t15\n\t&lt;/td&gt;
+[17] &lt;td class="g-spine"&gt;\n\t\t16\n\t&lt;/td&gt;
+[18] &lt;td class="g-spine"&gt;\n\t\t17\n\t&lt;/td&gt;
+[19] &lt;td class="g-spine"&gt;\n\t\t18\n\t&lt;/td&gt;
+[20] &lt;td class="g-spine"&gt;\n\t\t19\n\t&lt;/td&gt;
+...</code></pre>
+</div>
+</div>
+</section>
+<section id="scraping-spine-numbers-1" class="slide level2">
+<h2>Scraping Spine Numbers</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>page  <span class="sc">|&gt;</span>  </span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">".g-spine"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">html_text</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   [1] "Spine #"        "\n\t\t1\n\t"    "\n\t\t2\n\t"    "\n\t\t3\n\t"   
+   [5] "\n\t\t4\n\t"    "\n\t\t5\n\t"    "\n\t\t6\n\t"    "\n\t\t7\n\t"   
+   [9] "\n\t\t8\n\t"    "\n\t\t9\n\t"    "\n\t\t10\n\t"   "\n\t\t11\n\t"  
+  [13] "\n\t\t12\n\t"   "\n\t\t13\n\t"   "\n\t\t14\n\t"   "\n\t\t15\n\t"  
+  [17] "\n\t\t16\n\t"   "\n\t\t17\n\t"   "\n\t\t18\n\t"   "\n\t\t19\n\t"  
+  [21] "\n\t\t20\n\t"   "\n\t\t21\n\t"   "\n\t\t22\n\t"   "\n\t\t23\n\t"  
+  [25] "\n\t\t24\n\t"   "\n\t\t25\n\t"   "\n\t\t26\n\t"   "\n\t\t27\n\t"  
+  [29] "\n\t\t28\n\t"   "\n\t\t29\n\t"   "\n\t\t30\n\t"   "\n\t\t31\n\t"  
+  [33] "\n\t\t32\n\t"   "\n\t\t33\n\t"   "\n\t\t34\n\t"   "\n\t\t35\n\t"  
+  [37] "\n\t\t36\n\t"   "\n\t\t37\n\t"   "\n\t\t38\n\t"   "\n\t\t39\n\t"  
+  [41] "\n\t\t40\n\t"   "\n\t\t41\n\t"   "\n\t\t42\n\t"   "\n\t\t43\n\t"  
+  [45] "\n\t\t44\n\t"   "\n\t\t45\n\t"   "\n\t\t46\n\t"   "\n\t\t47\n\t"  
+  [49] "\n\t\t48\n\t"   "\n\t\t49\n\t"   "\n\t\t50\n\t"   "\n\t\t51\n\t"  
+  [53] "\n\t\t52\n\t"   "\n\t\t53\n\t"   "\n\t\t54\n\t"   "\n\t\t55\n\t"  
+  [57] "\n\t\t56\n\t"   "\n\t\t57\n\t"   "\n\t\t58\n\t"   "\n\t\t59\n\t"  
+  [61] "\n\t\t60\n\t"   "\n\t\t61\n\t"   "\n\t\t62\n\t"   "\n\t\t63\n\t"  
+  [65] "\n\t\t64\n\t"   "\n\t\t65\n\t"   "\n\t\t66\n\t"   "\n\t\t67\n\t"  
+  [69] "\n\t\t68\n\t"   "\n\t\t69\n\t"   "\n\t\t70\n\t"   "\n\t\t71\n\t"  
+  [73] "\n\t\t72\n\t"   "\n\t\t73\n\t"   "\n\t\t74\n\t"   "\n\t\t75\n\t"  
+  [77] "\n\t\t76\n\t"   "\n\t\t77\n\t"   "\n\t\t78\n\t"   "\n\t\t79\n\t"  
+  [81] "\n\t\t80\n\t"   "\n\t\t81\n\t"   "\n\t\t82\n\t"   "\n\t\t83\n\t"  
+  [85] "\n\t\t84\n\t"   "\n\t\t85\n\t"   "\n\t\t86\n\t"   "\n\t\t87\n\t"  
+  [89] "\n\t\t88\n\t"   "\n\t\t88\n\t"   "\n\t\t89\n\t"   "\n\t\t90\n\t"  
+  [93] "\n\t\t91\n\t"   "\n\t\t92\n\t"   "\n\t\t93\n\t"   "\n\t\t94\n\t"  
+  [97] "\n\t\t95\n\t"   "\n\t\t96\n\t"   "\n\t\t97\n\t"   "\n\t\t98\n\t"  
+ [101] "\n\t\t99\n\t"   "\n\t\t100\n\t"  "\n\t\t101\n\t"  "\n\t\t102\n\t" 
+ [105] "\n\t\t103\n\t"  "\n\t\t104\n\t"  "\n\t\t105\n\t"  "\n\t\t106\n\t" 
+ [109] "\n\t\t107\n\t"  "\n\t\t108\n\t"  "\n\t\t109\n\t"  "\n\t\t110\n\t" 
+ [113] "\n\t\t111\n\t"  "\n\t\t112\n\t"  "\n\t\t113\n\t"  "\n\t\t114\n\t" 
+ [117] "\n\t\t115\n\t"  "\n\t\t116\n\t"  "\n\t\t117\n\t"  "\n\t\t118\n\t" 
+ [121] "\n\t\t119\n\t"  "\n\t\t120\n\t"  "\n\t\t121\n\t"  "\n\t\t122\n\t" 
+ [125] "\n\t\t123\n\t"  "\n\t\t124\n\t"  "\n\t\t125\n\t"  "\n\t\t126\n\t" 
+ [129] "\n\t\t127\n\t"  "\n\t\t128\n\t"  "\n\t\t129\n\t"  "\n\t\t130\n\t" 
+ [133] "\n\t\t131\n\t"  "\n\t\t132\n\t"  "\n\t\t133\n\t"  "\n\t\t134\n\t" 
+ [137] "\n\t\t135\n\t"  "\n\t\t136\n\t"  "\n\t\t137\n\t"  "\n\t\t138\n\t" 
+ [141] "\n\t\t139\n\t"  "\n\t\t140\n\t"  "\n\t\t141\n\t"  "\n\t\t142\n\t" 
+ [145] "\n\t\t143\n\t"  "\n\t\t144\n\t"  "\n\t\t145\n\t"  "\n\t\t146\n\t" 
+ [149] "\n\t\t147\n\t"  "\n\t\t148\n\t"  "\n\t\t149\n\t"  "\n\t\t150\n\t" 
+ [153] "\n\t\t151\n\t"  "\n\t\t152\n\t"  "\n\t\t153\n\t"  "\n\t\t154\n\t" 
+ [157] "\n\t\t155\n\t"  "\n\t\t156\n\t"  "\n\t\t157\n\t"  "\n\t\t158\n\t" 
+ [161] "\n\t\t159\n\t"  "\n\t\t160\n\t"  "\n\t\t161\n\t"  "\n\t\t162\n\t" 
+ [165] "\n\t\t163\n\t"  "\n\t\t164\n\t"  "\n\t\t165\n\t"  "\n\t\t166\n\t" 
+ [169] "\n\t\t167\n\t"  "\n\t\t168\n\t"  "\n\t\t169\n\t"  "\n\t\t170\n\t" 
+ [173] "\n\t\t171\n\t"  "\n\t\t172\n\t"  "\n\t\t173\n\t"  "\n\t\t174\n\t" 
+ [177] "\n\t\t175\n\t"  "\n\t\t176\n\t"  "\n\t\t177\n\t"  "\n\t\t178\n\t" 
+ [181] "\n\t\t179\n\t"  "\n\t\t180\n\t"  "\n\t\t181\n\t"  "\n\t\t182\n\t" 
+ [185] "\n\t\t183\n\t"  "\n\t\t184\n\t"  "\n\t\t185\n\t"  "\n\t\t186\n\t" 
+ [189] "\n\t\t187\n\t"  "\n\t\t188\n\t"  "\n\t\t189\n\t"  "\n\t\t190\n\t" 
+ [193] "\n\t\t191\n\t"  "\n\t\t192\n\t"  "\n\t\t193\n\t"  "\n\t\t194\n\t" 
+ [197] "\n\t\t195\n\t"  "\n\t\t196\n\t"  "\n\t\t197\n\t"  "\n\t\t198\n\t" 
+ [201] "\n\t\t199\n\t"  "\n\t\t200\n\t"  "\n\t\t201\n\t"  "\n\t\t202\n\t" 
+ [205] "\n\t\t203\n\t"  "\n\t\t204\n\t"  "\n\t\t205\n\t"  "\n\t\t206\n\t" 
+ [209] "\n\t\t207\n\t"  "\n\t\t208\n\t"  "\n\t\t209\n\t"  "\n\t\t210\n\t" 
+ [213] "\n\t\t211\n\t"  "\n\t\t213\n\t"  "\n\t\t214\n\t"  "\n\t\t215\n\t" 
+ [217] "\n\t\t216\n\t"  "\n\t\t217\n\t"  "\n\t\t218\n\t"  "\n\t\t219\n\t" 
+ [221] "\n\t\t220\n\t"  "\n\t\t221\n\t"  "\n\t\t222\n\t"  "\n\t\t223\n\t" 
+ [225] "\n\t\t224\n\t"  "\n\t\t225\n\t"  "\n\t\t226\n\t"  "\n\t\t227\n\t" 
+ [229] "\n\t\t228\n\t"  "\n\t\t229\n\t"  "\n\t\t230\n\t"  "\n\t\t231\n\t" 
+ [233] "\n\t\t232\n\t"  "\n\t\t233\n\t"  "\n\t\t234\n\t"  "\n\t\t235\n\t" 
+ [237] "\n\t\t236\n\t"  "\n\t\t237\n\t"  "\n\t\t238\n\t"  "\n\t\t239\n\t" 
+ [241] "\n\t\t240\n\t"  "\n\t\t241\n\t"  "\n\t\t242\n\t"  "\n\t\t243\n\t" 
+ [245] "\n\t\t244\n\t"  "\n\t\t245\n\t"  "\n\t\t246\n\t"  "\n\t\t247\n\t" 
+ [249] "\n\t\t248\n\t"  "\n\t\t249\n\t"  "\n\t\t250\n\t"  "\n\t\t251\n\t" 
+ [253] "\n\t\t252\n\t"  "\n\t\t253\n\t"  "\n\t\t254\n\t"  "\n\t\t255\n\t" 
+ [257] "\n\t\t256\n\t"  "\n\t\t257\n\t"  "\n\t\t258\n\t"  "\n\t\t259\n\t" 
+ [261] "\n\t\t260\n\t"  "\n\t\t261\n\t"  "\n\t\t262\n\t"  "\n\t\t263\n\t" 
+ [265] "\n\t\t264\n\t"  "\n\t\t265\n\t"  "\n\t\t266\n\t"  "\n\t\t267\n\t" 
+ [269] "\n\t\t268\n\t"  "\n\t\t269\n\t"  "\n\t\t270\n\t"  "\n\t\t271\n\t" 
+ [273] "\n\t\t272\n\t"  "\n\t\t273\n\t"  "\n\t\t274\n\t"  "\n\t\t275\n\t" 
+ [277] "\n\t\t276\n\t"  "\n\t\t277\n\t"  "\n\t\t278\n\t"  "\n\t\t279\n\t" 
+ [281] "\n\t\t280\n\t"  "\n\t\t281\n\t"  "\n\t\t282\n\t"  "\n\t\t283\n\t" 
+ [285] "\n\t\t284\n\t"  "\n\t\t285\n\t"  "\n\t\t286\n\t"  "\n\t\t287\n\t" 
+ [289] "\n\t\t288\n\t"  "\n\t\t289\n\t"  "\n\t\t290\n\t"  "\n\t\t291\n\t" 
+ [293] "\n\t\t292\n\t"  "\n\t\t293\n\t"  "\n\t\t294\n\t"  "\n\t\t295\n\t" 
+ [297] "\n\t\t296\n\t"  "\n\t\t297\n\t"  "\n\t\t298\n\t"  "\n\t\t299\n\t" 
+ [301] "\n\t\t300\n\t"  "\n\t\t301\n\t"  "\n\t\t302\n\t"  "\n\t\t303\n\t" 
+ [305] "\n\t\t304\n\t"  "\n\t\t305\n\t"  "\n\t\t306\n\t"  "\n\t\t307\n\t" 
+ [309] "\n\t\t308\n\t"  "\n\t\t309\n\t"  "\n\t\t310\n\t"  "\n\t\t311\n\t" 
+ [313] "\n\t\t312\n\t"  "\n\t\t313\n\t"  "\n\t\t314\n\t"  "\n\t\t315\n\t" 
+ [317] "\n\t\t316\n\t"  "\n\t\t317\n\t"  "\n\t\t318\n\t"  "\n\t\t319\n\t" 
+ [321] "\n\t\t320\n\t"  "\n\t\t321\n\t"  "\n\t\t322\n\t"  "\n\t\t323\n\t" 
+ [325] "\n\t\t324\n\t"  "\n\t\t325\n\t"  "\n\t\t326\n\t"  "\n\t\t327\n\t" 
+ [329] "\n\t\t328\n\t"  "\n\t\t329\n\t"  "\n\t\t330\n\t"  "\n\t\t331\n\t" 
+ [333] "\n\t\t332\n\t"  "\n\t\t333\n\t"  "\n\t\t334\n\t"  "\n\t\t335\n\t" 
+ [337] "\n\t\t336\n\t"  "\n\t\t337\n\t"  "\n\t\t338\n\t"  "\n\t\t339\n\t" 
+ [341] "\n\t\t340\n\t"  "\n\t\t341\n\t"  "\n\t\t342\n\t"  "\n\t\t343\n\t" 
+ [345] "\n\t\t344\n\t"  "\n\t\t345\n\t"  "\n\t\t346\n\t"  "\n\t\t347\n\t" 
+ [349] "\n\t\t348\n\t"  "\n\t\t349\n\t"  "\n\t\t350\n\t"  "\n\t\t351\n\t" 
+ [353] "\n\t\t352\n\t"  "\n\t\t353\n\t"  "\n\t\t354\n\t"  "\n\t\t355\n\t" 
+ [357] "\n\t\t356\n\t"  "\n\t\t357\n\t"  "\n\t\t358\n\t"  "\n\t\t359\n\t" 
+ [361] "\n\t\t360\n\t"  "\n\t\t361\n\t"  "\n\t\t362\n\t"  "\n\t\t363\n\t" 
+ [365] "\n\t\t364\n\t"  "\n\t\t365\n\t"  "\n\t\t366\n\t"  "\n\t\t367\n\t" 
+ [369] "\n\t\t368\n\t"  "\n\t\t369\n\t"  "\n\t\t370\n\t"  "\n\t\t371\n\t" 
+ [373] "\n\t\t372\n\t"  "\n\t\t373\n\t"  "\n\t\t374\n\t"  "\n\t\t375\n\t" 
+ [377] "\n\t\t376\n\t"  "\n\t\t377\n\t"  "\n\t\t378\n\t"  "\n\t\t379\n\t" 
+ [381] "\n\t\t380\n\t"  "\n\t\t381\n\t"  "\n\t\t382\n\t"  "\n\t\t383\n\t" 
+ [385] "\n\t\t384\n\t"  "\n\t\t385\n\t"  "\n\t\t386\n\t"  "\n\t\t387\n\t" 
+ [389] "\n\t\t388\n\t"  "\n\t\t389\n\t"  "\n\t\t390\n\t"  "\n\t\t391\n\t" 
+ [393] "\n\t\t392\n\t"  "\n\t\t393\n\t"  "\n\t\t394\n\t"  "\n\t\t395\n\t" 
+ [397] "\n\t\t396\n\t"  "\n\t\t397\n\t"  "\n\t\t398\n\t"  "\n\t\t399\n\t" 
+ [401] "\n\t\t400\n\t"  "\n\t\t401\n\t"  "\n\t\t402\n\t"  "\n\t\t403\n\t" 
+ [405] "\n\t\t404\n\t"  "\n\t\t405\n\t"  "\n\t\t406\n\t"  "\n\t\t407\n\t" 
+ [409] "\n\t\t408\n\t"  "\n\t\t409\n\t"  "\n\t\t410\n\t"  "\n\t\t411\n\t" 
+ [413] "\n\t\t412\n\t"  "\n\t\t413\n\t"  "\n\t\t414\n\t"  "\n\t\t415\n\t" 
+ [417] "\n\t\t416\n\t"  "\n\t\t417\n\t"  "\n\t\t418\n\t"  "\n\t\t419\n\t" 
+ [421] "\n\t\t420\n\t"  "\n\t\t421\n\t"  "\n\t\t422\n\t"  "\n\t\t423\n\t" 
+ [425] "\n\t\t424\n\t"  "\n\t\t425\n\t"  "\n\t\t426\n\t"  "\n\t\t427\n\t" 
+ [429] "\n\t\t428\n\t"  "\n\t\t429\n\t"  "\n\t\t430\n\t"  "\n\t\t431\n\t" 
+ [433] "\n\t\t432\n\t"  "\n\t\t433\n\t"  "\n\t\t434\n\t"  "\n\t\t435\n\t" 
+ [437] "\n\t\t436\n\t"  "\n\t\t437\n\t"  "\n\t\t438\n\t"  "\n\t\t439\n\t" 
+ [441] "\n\t\t440\n\t"  "\n\t\t441\n\t"  "\n\t\t442\n\t"  "\n\t\t443\n\t" 
+ [445] "\n\t\t444\n\t"  "\n\t\t445\n\t"  "\n\t\t446\n\t"  "\n\t\t447\n\t" 
+ [449] "\n\t\t448\n\t"  "\n\t\t449\n\t"  "\n\t\t450\n\t"  "\n\t\t451\n\t" 
+ [453] "\n\t\t452\n\t"  "\n\t\t453\n\t"  "\n\t\t454\n\t"  "\n\t\t455\n\t" 
+ [457] "\n\t\t456\n\t"  "\n\t\t457\n\t"  "\n\t\t458\n\t"  "\n\t\t459\n\t" 
+ [461] "\n\t\t460\n\t"  "\n\t\t461\n\t"  "\n\t\t462\n\t"  "\n\t\t463\n\t" 
+ [465] "\n\t\t464\n\t"  "\n\t\t465\n\t"  "\n\t\t466\n\t"  "\n\t\t467\n\t" 
+ [469] "\n\t\t468\n\t"  "\n\t\t469\n\t"  "\n\t\t470\n\t"  "\n\t\t471\n\t" 
+ [473] "\n\t\t472\n\t"  "\n\t\t473\n\t"  "\n\t\t474\n\t"  "\n\t\t475\n\t" 
+ [477] "\n\t\t476\n\t"  "\n\t\t477\n\t"  "\n\t\t478\n\t"  "\n\t\t479\n\t" 
+ [481] "\n\t\t480\n\t"  "\n\t\t481\n\t"  "\n\t\t482\n\t"  "\n\t\t483\n\t" 
+ [485] "\n\t\t484\n\t"  "\n\t\t485\n\t"  "\n\t\t486\n\t"  "\n\t\t487\n\t" 
+ [489] "\n\t\t488\n\t"  "\n\t\t489\n\t"  "\n\t\t490\n\t"  "\n\t\t491\n\t" 
+ [493] "\n\t\t492\n\t"  "\n\t\t493\n\t"  "\n\t\t494\n\t"  "\n\t\t495\n\t" 
+ [497] "\n\t\t496\n\t"  "\n\t\t497\n\t"  "\n\t\t498\n\t"  "\n\t\t499\n\t" 
+ [501] "\n\t\t500\n\t"  "\n\t\t501\n\t"  "\n\t\t502\n\t"  "\n\t\t503\n\t" 
+ [505] "\n\t\t504\n\t"  "\n\t\t505\n\t"  "\n\t\t506\n\t"  "\n\t\t507\n\t" 
+ [509] "\n\t\t508\n\t"  "\n\t\t509\n\t"  "\n\t\t510\n\t"  "\n\t\t511\n\t" 
+ [513] "\n\t\t512\n\t"  "\n\t\t513\n\t"  "\n\t\t514\n\t"  "\n\t\t515\n\t" 
+ [517] "\n\t\t516\n\t"  "\n\t\t517\n\t"  "\n\t\t518\n\t"  "\n\t\t519\n\t" 
+ [521] "\n\t\t520\n\t"  "\n\t\t521\n\t"  "\n\t\t522\n\t"  "\n\t\t523\n\t" 
+ [525] "\n\t\t524\n\t"  "\n\t\t525\n\t"  "\n\t\t526\n\t"  "\n\t\t527\n\t" 
+ [529] "\n\t\t528\n\t"  "\n\t\t529\n\t"  "\n\t\t530\n\t"  "\n\t\t531\n\t" 
+ [533] "\n\t\t532\n\t"  "\n\t\t533\n\t"  "\n\t\t534\n\t"  "\n\t\t535\n\t" 
+ [537] "\n\t\t536\n\t"  "\n\t\t537\n\t"  "\n\t\t538\n\t"  "\n\t\t539\n\t" 
+ [541] "\n\t\t540\n\t"  "\n\t\t541\n\t"  "\n\t\t542\n\t"  "\n\t\t543\n\t" 
+ [545] "\n\t\t544\n\t"  "\n\t\t545\n\t"  "\n\t\t546\n\t"  "\n\t\t547\n\t" 
+ [549] "\n\t\t548\n\t"  "\n\t\t549\n\t"  "\n\t\t550\n\t"  "\n\t\t551\n\t" 
+ [553] "\n\t\t552\n\t"  "\n\t\t553\n\t"  "\n\t\t554\n\t"  "\n\t\t555\n\t" 
+ [557] "\n\t\t556\n\t"  "\n\t\t557\n\t"  "\n\t\t558\n\t"  "\n\t\t559\n\t" 
+ [561] "\n\t\t560\n\t"  "\n\t\t561\n\t"  "\n\t\t562\n\t"  "\n\t\t563\n\t" 
+ [565] "\n\t\t564\n\t"  "\n\t\t565\n\t"  "\n\t\t566\n\t"  "\n\t\t567\n\t" 
+ [569] "\n\t\t568\n\t"  "\n\t\t569\n\t"  "\n\t\t570\n\t"  "\n\t\t571\n\t" 
+ [573] "\n\t\t572\n\t"  "\n\t\t573\n\t"  "\n\t\t574\n\t"  "\n\t\t575\n\t" 
+ [577] "\n\t\t576\n\t"  "\n\t\t577\n\t"  "\n\t\t578\n\t"  "\n\t\t579\n\t" 
+ [581] "\n\t\t580\n\t"  "\n\t\t581\n\t"  "\n\t\t582\n\t"  "\n\t\t583\n\t" 
+ [585] "\n\t\t584\n\t"  "\n\t\t585\n\t"  "\n\t\t586\n\t"  "\n\t\t587\n\t" 
+ [589] "\n\t\t588\n\t"  "\n\t\t589\n\t"  "\n\t\t590\n\t"  "\n\t\t591\n\t" 
+ [593] "\n\t\t592\n\t"  "\n\t\t593\n\t"  "\n\t\t594\n\t"  "\n\t\t595\n\t" 
+ [597] "\n\t\t596\n\t"  "\n\t\t597\n\t"  "\n\t\t598\n\t"  "\n\t\t599\n\t" 
+ [601] "\n\t\t600\n\t"  "\n\t\t601\n\t"  "\n\t\t602\n\t"  "\n\t\t603\n\t" 
+ [605] "\n\t\t604\n\t"  "\n\t\t605\n\t"  "\n\t\t606\n\t"  "\n\t\t607\n\t" 
+ [609] "\n\t\t608\n\t"  "\n\t\t609\n\t"  "\n\t\t610\n\t"  "\n\t\t611\n\t" 
+ [613] "\n\t\t612\n\t"  "\n\t\t613\n\t"  "\n\t\t614\n\t"  "\n\t\t615\n\t" 
+ [617] "\n\t\t616\n\t"  "\n\t\t617\n\t"  "\n\t\t618\n\t"  "\n\t\t619\n\t" 
+ [621] "\n\t\t620\n\t"  "\n\t\t621\n\t"  "\n\t\t622\n\t"  "\n\t\t623\n\t" 
+ [625] "\n\t\t624\n\t"  "\n\t\t625\n\t"  "\n\t\t626\n\t"  "\n\t\t627\n\t" 
+ [629] "\n\t\t628\n\t"  "\n\t\t629\n\t"  "\n\t\t630\n\t"  "\n\t\t631\n\t" 
+ [633] "\n\t\t632\n\t"  "\n\t\t633\n\t"  "\n\t\t634\n\t"  "\n\t\t635\n\t" 
+ [637] "\n\t\t636\n\t"  "\n\t\t637\n\t"  "\n\t\t638\n\t"  "\n\t\t639\n\t" 
+ [641] "\n\t\t640\n\t"  "\n\t\t641\n\t"  "\n\t\t642\n\t"  "\n\t\t643\n\t" 
+ [645] "\n\t\t644\n\t"  "\n\t\t645\n\t"  "\n\t\t646\n\t"  "\n\t\t647\n\t" 
+ [649] "\n\t\t648\n\t"  "\n\t\t649\n\t"  "\n\t\t650\n\t"  "\n\t\t651\n\t" 
+ [653] "\n\t\t652\n\t"  "\n\t\t653\n\t"  "\n\t\t654\n\t"  "\n\t\t655\n\t" 
+ [657] "\n\t\t656\n\t"  "\n\t\t657\n\t"  "\n\t\t658\n\t"  "\n\t\t659\n\t" 
+ [661] "\n\t\t660\n\t"  "\n\t\t661\n\t"  "\n\t\t662\n\t"  "\n\t\t663\n\t" 
+ [665] "\n\t\t664\n\t"  "\n\t\t665\n\t"  "\n\t\t666\n\t"  "\n\t\t667\n\t" 
+ [669] "\n\t\t668\n\t"  "\n\t\t669\n\t"  "\n\t\t670\n\t"  "\n\t\t671\n\t" 
+ [673] "\n\t\t672\n\t"  "\n\t\t673\n\t"  "\n\t\t674\n\t"  "\n\t\t675\n\t" 
+ [677] "\n\t\t676\n\t"  "\n\t\t677\n\t"  "\n\t\t678\n\t"  "\n\t\t679\n\t" 
+ [681] "\n\t\t680\n\t"  "\n\t\t681\n\t"  "\n\t\t682\n\t"  "\n\t\t683\n\t" 
+ [685] "\n\t\t684\n\t"  "\n\t\t685\n\t"  "\n\t\t686\n\t"  "\n\t\t687\n\t" 
+ [689] "\n\t\t688\n\t"  "\n\t\t689\n\t"  "\n\t\t690\n\t"  "\n\t\t691\n\t" 
+ [693] "\n\t\t692\n\t"  "\n\t\t693\n\t"  "\n\t\t694\n\t"  "\n\t\t695\n\t" 
+ [697] "\n\t\t696\n\t"  "\n\t\t697\n\t"  "\n\t\t698\n\t"  "\n\t\t699\n\t" 
+ [701] "\n\t\t700\n\t"  "\n\t\t701\n\t"  "\n\t\t702\n\t"  "\n\t\t703\n\t" 
+ [705] "\n\t\t704\n\t"  "\n\t\t705\n\t"  "\n\t\t706\n\t"  "\n\t\t707\n\t" 
+ [709] "\n\t\t708\n\t"  "\n\t\t709\n\t"  "\n\t\t710\n\t"  "\n\t\t711\n\t" 
+ [713] "\n\t\t712\n\t"  "\n\t\t713\n\t"  "\n\t\t714\n\t"  "\n\t\t715\n\t" 
+ [717] "\n\t\t716\n\t"  "\n\t\t717\n\t"  "\n\t\t718\n\t"  "\n\t\t719\n\t" 
+ [721] "\n\t\t720\n\t"  "\n\t\t721\n\t"  "\n\t\t722\n\t"  "\n\t\t723\n\t" 
+ [725] "\n\t\t724\n\t"  "\n\t\t725\n\t"  "\n\t\t726\n\t"  "\n\t\t727\n\t" 
+ [729] "\n\t\t728\n\t"  "\n\t\t729\n\t"  "\n\t\t730\n\t"  "\n\t\t731\n\t" 
+ [733] "\n\t\t732\n\t"  "\n\t\t733\n\t"  "\n\t\t734\n\t"  "\n\t\t735\n\t" 
+ [737] "\n\t\t736\n\t"  "\n\t\t737\n\t"  "\n\t\t738\n\t"  "\n\t\t739\n\t" 
+ [741] "\n\t\t740\n\t"  "\n\t\t741\n\t"  "\n\t\t742\n\t"  "\n\t\t743\n\t" 
+ [745] "\n\t\t744\n\t"  "\n\t\t745\n\t"  "\n\t\t746\n\t"  "\n\t\t747\n\t" 
+ [749] "\n\t\t748\n\t"  "\n\t\t749\n\t"  "\n\t\t750\n\t"  "\n\t\t751\n\t" 
+ [753] "\n\t\t752\n\t"  "\n\t\t753\n\t"  "\n\t\t754\n\t"  "\n\t\t755\n\t" 
+ [757] "\n\t\t756\n\t"  "\n\t\t757\n\t"  "\n\t\t758\n\t"  "\n\t\t759\n\t" 
+ [761] "\n\t\t760\n\t"  "\n\t\t761\n\t"  "\n\t\t762\n\t"  "\n\t\t763\n\t" 
+ [765] "\n\t\t764\n\t"  "\n\t\t765\n\t"  "\n\t\t766\n\t"  "\n\t\t767\n\t" 
+ [769] "\n\t\t768\n\t"  "\n\t\t769\n\t"  "\n\t\t770\n\t"  "\n\t\t771\n\t" 
+ [773] "\n\t\t772\n\t"  "\n\t\t773\n\t"  "\n\t\t774\n\t"  "\n\t\t775\n\t" 
+ [777] "\n\t\t776\n\t"  "\n\t\t777\n\t"  "\n\t\t778\n\t"  "\n\t\t779\n\t" 
+ [781] "\n\t\t780\n\t"  "\n\t\t781\n\t"  "\n\t\t782\n\t"  "\n\t\t783\n\t" 
+ [785] "\n\t\t784\n\t"  "\n\t\t785\n\t"  "\n\t\t786\n\t"  "\n\t\t787\n\t" 
+ [789] "\n\t\t788\n\t"  "\n\t\t789\n\t"  "\n\t\t790\n\t"  "\n\t\t791\n\t" 
+ [793] "\n\t\t792\n\t"  "\n\t\t793\n\t"  "\n\t\t794\n\t"  "\n\t\t795\n\t" 
+ [797] "\n\t\t796\n\t"  "\n\t\t797\n\t"  "\n\t\t798\n\t"  "\n\t\t799\n\t" 
+ [801] "\n\t\t800\n\t"  "\n\t\t801\n\t"  "\n\t\t802\n\t"  "\n\t\t803\n\t" 
+ [805] "\n\t\t804\n\t"  "\n\t\t805\n\t"  "\n\t\t806\n\t"  "\n\t\t807\n\t" 
+ [809] "\n\t\t808\n\t"  "\n\t\t809\n\t"  "\n\t\t810\n\t"  "\n\t\t811\n\t" 
+ [813] "\n\t\t812\n\t"  "\n\t\t813\n\t"  "\n\t\t814\n\t"  "\n\t\t815\n\t" 
+ [817] "\n\t\t816\n\t"  "\n\t\t817\n\t"  "\n\t\t818\n\t"  "\n\t\t819\n\t" 
+ [821] "\n\t\t820\n\t"  "\n\t\t821\n\t"  "\n\t\t822\n\t"  "\n\t\t823\n\t" 
+ [825] "\n\t\t824\n\t"  "\n\t\t825\n\t"  "\n\t\t826\n\t"  "\n\t\t827\n\t" 
+ [829] "\n\t\t828\n\t"  "\n\t\t829\n\t"  "\n\t\t830\n\t"  "\n\t\t831\n\t" 
+ [833] "\n\t\t832\n\t"  "\n\t\t833\n\t"  "\n\t\t834\n\t"  "\n\t\t835\n\t" 
+ [837] "\n\t\t836\n\t"  "\n\t\t837\n\t"  "\n\t\t838\n\t"  "\n\t\t839\n\t" 
+ [841] "\n\t\t840\n\t"  "\n\t\t841\n\t"  "\n\t\t842\n\t"  "\n\t\t843\n\t" 
+ [845] "\n\t\t844\n\t"  "\n\t\t845\n\t"  "\n\t\t846\n\t"  "\n\t\t847\n\t" 
+ [849] "\n\t\t848\n\t"  "\n\t\t849\n\t"  "\n\t\t850\n\t"  "\n\t\t851\n\t" 
+ [853] "\n\t\t852\n\t"  "\n\t\t853\n\t"  "\n\t\t854\n\t"  "\n\t\t855\n\t" 
+ [857] "\n\t\t856\n\t"  "\n\t\t857\n\t"  "\n\t\t858\n\t"  "\n\t\t859\n\t" 
+ [861] "\n\t\t860\n\t"  "\n\t\t861\n\t"  "\n\t\t862\n\t"  "\n\t\t863\n\t" 
+ [865] "\n\t\t864\n\t"  "\n\t\t865\n\t"  "\n\t\t866\n\t"  "\n\t\t867\n\t" 
+ [869] "\n\t\t868\n\t"  "\n\t\t869\n\t"  "\n\t\t870\n\t"  "\n\t\t871\n\t" 
+ [873] "\n\t\t872\n\t"  "\n\t\t873\n\t"  "\n\t\t874\n\t"  "\n\t\t875\n\t" 
+ [877] "\n\t\t876\n\t"  "\n\t\t877\n\t"  "\n\t\t878\n\t"  "\n\t\t879\n\t" 
+ [881] "\n\t\t880\n\t"  "\n\t\t881\n\t"  "\n\t\t882\n\t"  "\n\t\t883\n\t" 
+ [885] "\n\t\t884\n\t"  "\n\t\t885\n\t"  "\n\t\t886\n\t"  "\n\t\t887\n\t" 
+ [889] "\n\t\t888\n\t"  "\n\t\t889\n\t"  "\n\t\t890\n\t"  "\n\t\t891\n\t" 
+ [893] "\n\t\t892\n\t"  "\n\t\t893\n\t"  "\n\t\t894\n\t"  "\n\t\t895\n\t" 
+ [897] "\n\t\t896\n\t"  "\n\t\t897\n\t"  "\n\t\t898\n\t"  "\n\t\t899\n\t" 
+ [901] "\n\t\t900\n\t"  "\n\t\t901\n\t"  "\n\t\t902\n\t"  "\n\t\t903\n\t" 
+ [905] "\n\t\t904\n\t"  "\n\t\t905\n\t"  "\n\t\t906\n\t"  "\n\t\t907\n\t" 
+ [909] "\n\t\t908\n\t"  "\n\t\t909\n\t"  "\n\t\t910\n\t"  "\n\t\t911\n\t" 
+ [913] "\n\t\t912\n\t"  "\n\t\t913\n\t"  "\n\t\t914\n\t"  "\n\t\t915\n\t" 
+ [917] "\n\t\t916\n\t"  "\n\t\t917\n\t"  "\n\t\t918\n\t"  "\n\t\t919\n\t" 
+ [921] "\n\t\t920\n\t"  "\n\t\t921\n\t"  "\n\t\t922\n\t"  "\n\t\t923\n\t" 
+ [925] "\n\t\t924\n\t"  "\n\t\t925\n\t"  "\n\t\t926\n\t"  "\n\t\t927\n\t" 
+ [929] "\n\t\t928\n\t"  "\n\t\t929\n\t"  "\n\t\t930\n\t"  "\n\t\t931\n\t" 
+ [933] "\n\t\t932\n\t"  "\n\t\t933\n\t"  "\n\t\t934\n\t"  "\n\t\t935\n\t" 
+ [937] "\n\t\t936\n\t"  "\n\t\t937\n\t"  "\n\t\t938\n\t"  "\n\t\t939\n\t" 
+ [941] "\n\t\t940\n\t"  "\n\t\t941\n\t"  "\n\t\t942\n\t"  "\n\t\t943\n\t" 
+ [945] "\n\t\t944\n\t"  "\n\t\t945\n\t"  "\n\t\t946\n\t"  "\n\t\t947\n\t" 
+ [949] "\n\t\t948\n\t"  "\n\t\t949\n\t"  "\n\t\t950\n\t"  "\n\t\t951\n\t" 
+ [953] "\n\t\t952\n\t"  "\n\t\t953\n\t"  "\n\t\t954\n\t"  "\n\t\t955\n\t" 
+ [957] "\n\t\t956\n\t"  "\n\t\t957\n\t"  "\n\t\t958\n\t"  "\n\t\t959\n\t" 
+ [961] "\n\t\t960\n\t"  "\n\t\t961\n\t"  "\n\t\t962\n\t"  "\n\t\t963\n\t" 
+ [965] "\n\t\t964\n\t"  "\n\t\t965\n\t"  "\n\t\t966\n\t"  "\n\t\t967\n\t" 
+ [969] "\n\t\t968\n\t"  "\n\t\t969\n\t"  "\n\t\t970\n\t"  "\n\t\t971\n\t" 
+ [973] "\n\t\t972\n\t"  "\n\t\t973\n\t"  "\n\t\t974\n\t"  "\n\t\t975\n\t" 
+ [977] "\n\t\t976\n\t"  "\n\t\t977\n\t"  "\n\t\t978\n\t"  "\n\t\t979\n\t" 
+ [981] "\n\t\t980\n\t"  "\n\t\t981\n\t"  "\n\t\t982\n\t"  "\n\t\t983\n\t" 
+ [985] "\n\t\t984\n\t"  "\n\t\t985\n\t"  "\n\t\t986\n\t"  "\n\t\t987\n\t" 
+ [989] "\n\t\t988\n\t"  "\n\t\t989\n\t"  "\n\t\t990\n\t"  "\n\t\t991\n\t" 
+ [993] "\n\t\t992\n\t"  "\n\t\t993\n\t"  "\n\t\t994\n\t"  "\n\t\t995\n\t" 
+ [997] "\n\t\t996\n\t"  "\n\t\t997\n\t"  "\n\t\t998\n\t"  "\n\t\t999\n\t" 
+[1001] "\n\t\t1000\n\t" "\n\t\t1001\n\t" "\n\t\t1002\n\t" "\n\t\t1003\n\t"
+[1005] "\n\t\t1004\n\t" "\n\t\t1005\n\t" "\n\t\t1006\n\t" "\n\t\t1007\n\t"
+[1009] "\n\t\t1008\n\t" "\n\t\t1009\n\t" "\n\t\t1010\n\t" "\n\t\t1011\n\t"
+[1013] "\n\t\t1012\n\t" "\n\t\t1013\n\t" "\n\t\t1014\n\t" "\n\t\t1015\n\t"
+[1017] "\n\t\t1016\n\t" "\n\t\t1017\n\t" "\n\t\t1018\n\t" "\n\t\t1019\n\t"
+[1021] "\n\t\t1020\n\t" "\n\t\t1021\n\t" "\n\t\t1022\n\t" "\n\t\t1023\n\t"
+[1025] "\n\t\t1024\n\t" "\n\t\t1025\n\t" "\n\t\t1026\n\t" "\n\t\t1027\n\t"
+[1029] "\n\t\t1028\n\t" "\n\t\t1029\n\t" "\n\t\t1030\n\t" "\n\t\t1031\n\t"
+[1033] "\n\t\t1032\n\t" "\n\t\t1033\n\t" "\n\t\t1034\n\t" "\n\t\t1035\n\t"
+[1037] "\n\t\t1036\n\t" "\n\t\t1037\n\t" "\n\t\t1038\n\t" "\n\t\t1039\n\t"
+[1041] "\n\t\t1040\n\t" "\n\t\t1041\n\t" "\n\t\t1042\n\t" "\n\t\t1043\n\t"
+[1045] "\n\t\t1044\n\t" "\n\t\t1045\n\t" "\n\t\t1046\n\t" "\n\t\t1047\n\t"
+[1049] "\n\t\t1048\n\t" "\n\t\t1049\n\t" "\n\t\t1050\n\t" "\n\t\t1051\n\t"
+[1053] "\n\t\t1052\n\t" "\n\t\t1053\n\t" "\n\t\t1054\n\t" "\n\t\t1055\n\t"
+[1057] "\n\t\t1056\n\t" "\n\t\t1057\n\t" "\n\t\t1058\n\t" "\n\t\t1059\n\t"
+[1061] "\n\t\t1060\n\t" "\n\t\t1061\n\t" "\n\t\t1062\n\t" "\n\t\t1063\n\t"
+[1065] "\n\t\t1064\n\t" "\n\t\t1065\n\t" "\n\t\t1066\n\t" "\n\t\t1067\n\t"
+[1069] "\n\t\t1068\n\t" "\n\t\t1069\n\t" "\n\t\t1070\n\t" "\n\t\t1071\n\t"
+[1073] "\n\t\t1072\n\t" "\n\t\t1073\n\t" "\n\t\t1074\n\t" "\n\t\t1075\n\t"
+[1077] "\n\t\t1076\n\t" "\n\t\t1077\n\t" "\n\t\t1078\n\t" "\n\t\t1079\n\t"
+[1081] "\n\t\t1080\n\t" "\n\t\t1081\n\t" "\n\t\t1082\n\t" "\n\t\t1083\n\t"
+[1085] "\n\t\t1084\n\t" "\n\t\t1085\n\t" "\n\t\t1086\n\t" "\n\t\t1087\n\t"
+[1089] "\n\t\t1088\n\t" "\n\t\t1089\n\t" "\n\t\t1090\n\t" "\n\t\t1091\n\t"
+[1093] "\n\t\t1092\n\t" "\n\t\t1093\n\t" "\n\t\t1094\n\t" "\n\t\t1095\n\t"
+[1097] "\n\t\t1096\n\t" "\n\t\t1097\n\t" "\n\t\t1098\n\t" "\n\t\t1099\n\t"
+[1101] "\n\t\t1100\n\t" "\n\t\t1101\n\t" "\n\t\t1102\n\t" "\n\t\t1103\n\t"
+[1105] "\n\t\t1104\n\t" "\n\t\t1105\n\t" "\n\t\t1106\n\t" "\n\t\t1107\n\t"
+[1109] "\n\t\t1108\n\t" "\n\t\t1109\n\t" "\n\t\t1110\n\t" "\n\t\t1111\n\t"
+[1113] "\n\t\t1112\n\t" "\n\t\t1113\n\t" "\n\t\t1114\n\t" "\n\t\t1115\n\t"
+[1117] "\n\t\t1116\n\t" "\n\t\t1117\n\t" "\n\t\t1118\n\t" "\n\t\t1119\n\t"
+[1121] "\n\t\t1120\n\t" "\n\t\t1121\n\t" "\n\t\t1122\n\t" "\n\t\t1123\n\t"
+[1125] "\n\t\t1124\n\t" "\n\t\t1125\n\t" "\n\t\t1126\n\t" "\n\t\t1127\n\t"
+[1129] "\n\t\t1128\n\t" "\n\t\t1129\n\t" "\n\t\t1130\n\t" "\n\t\t1131\n\t"
+[1133] "\n\t\t1132\n\t" "\n\t\t1133\n\t" "\n\t\t1134\n\t" "\n\t\t1135\n\t"
+[1137] "\n\t\t1136\n\t" "\n\t\t1137\n\t" "\n\t\t1138\n\t" "\n\t\t1139\n\t"
+[1141] "\n\t\t1140\n\t" "\n\t\t1141\n\t" "\n\t\t1142\n\t" "\n\t\t1143\n\t"
+[1145] "\n\t\t1144\n\t" "\n\t\t1145\n\t" "\n\t\t1146\n\t" "\n\t\t1147\n\t"
+[1149] "\n\t\t1148\n\t" "\n\t\t1149\n\t" "\n\t\t1150\n\t" "\n\t\t1151\n\t"
+[1153] "\n\t\t1152\n\t" "\n\t\t1153\n\t" "\n\t\t1154\n\t" "\n\t\t1155\n\t"
+[1157] "\n\t\t1156\n\t" "\n\t\t1157\n\t" "\n\t\t1158\n\t" "\n\t\t1159\n\t"
+[1161] "\n\t\t1160\n\t" "\n\t\t1161\n\t" "\n\t\t1162\n\t" "\n\t\t1163\n\t"
+[1165] "\n\t\t1164\n\t" "\n\t\t1165\n\t" "\n\t\t1166\n\t" "\n\t\t1167\n\t"
+[1169] "\n\t\t1168\n\t" "\n\t\t1169\n\t" "\n\t\t1170\n\t" "\n\t\t1171\n\t"
+[1173] "\n\t\t1172\n\t" "\n\t\t1173\n\t" "\n\t\t1174\n\t" "\n\t\t1175\n\t"
+[1177] "\n\t\t1176\n\t" "\n\t\t1177\n\t" "\n\t\t1178\n\t" "\n\t\t1179\n\t"
+[1181] "\n\t\t1180\n\t" "\n\t\t1181\n\t" "\n\t\t1182\n\t" "\n\t\t1183\n\t"
+[1185] "\n\t\t1184\n\t" "\n\t\t1185\n\t" "\n\t\t1186\n\t" "\n\t\t1187\n\t"
+[1189] "\n\t\t1188\n\t" "\n\t\t1189\n\t" "\n\t\t1190\n\t" "\n\t\t1191\n\t"
+[1193] "\n\t\t1192\n\t" "\n\t\t1193\n\t" "\n\t\t1194\n\t" "\n\t\t1195\n\t"
+[1197] "\n\t\t1196\n\t" "\n\t\t1197\n\t" "\n\t\t1198\n\t" "\n\t\t1199\n\t"
+[1201] "\n\t\t1200\n\t" "\n\t\t1201\n\t" "\n\t\t1202\n\t" "\n\t\t1203\n\t"
+[1205] "\n\t\t1204\n\t" "\n\t\t1205\n\t" "\n\t\t1206\n\t" "\n\t\t1207\n\t"
+[1209] "\n\t\t1208\n\t" "\n\t\t1209\n\t" "\n\t\t1210\n\t" "\n\t\t1211\n\t"
+[1213] "\n\t\t1212\n\t" "\n\t\t1213\n\t" "\n\t\t1214\n\t" "\n\t\t1215\n\t"
+[1217] "\n\t\t1216\n\t" "\n\t\t1217\n\t" "\n\t\t1218\n\t" "\n\t\t1219\n\t"
+[1221] "\n\t\t1220\n\t" "\n\t\t1221\n\t" "\n\t\t1222\n\t" "\n\t\t1223\n\t"
+[1225] "\n\t\t1224\n\t" "\n\t\t1225\n\t" "\n\t\t1226\n\t" "\n\t\t1227\n\t"
+[1229] "\n\t\t1228\n\t" "\n\t\t1229\n\t" "\n\t\t1230\n\t" "\n\t\t1231\n\t"
+[1233] "\n\t\t1232\n\t" "\n\t\t1233\n\t" "\n\t\t1234\n\t" "\n\t\t1235\n\t"
+[1237] "\n\t\t1236\n\t" "\n\t\t1237\n\t" "\n\t\t1238\n\t" "\n\t\t1239\n\t"
+[1241] "\n\t\t1240\n\t" "\n\t\t1241\n\t" "\n\t\t1242\n\t" "\n\t\t1243\n\t"
+[1245] "\n\t\t1244\n\t" "\n\t\t1245\n\t" "\n\t\t1246\n\t" "\n\t\t1247\n\t"
+[1249] "\n\t\t1248\n\t" "\n\t\t1249\n\t" "\n\t\t1250\n\t" "\n\t\t1251\n\t"
+[1253] "\n\t\t1252\n\t" "\n\t\t1253\n\t" "\n\t\t1254\n\t" "\n\t\t1255\n\t"
+[1257] "\n\t\t1256\n\t" "\n\t\t1257\n\t" "\n\t\t1258\n\t" "\n\t\t1259\n\t"
+[1261] "\n\t\t1260\n\t" "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1265] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1269] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1273] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1277] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1281] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1285] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1289] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1293] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1297] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1301] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1305] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1309] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1313] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1317] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1321] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1325] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1329] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1333] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1337] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1341] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1345] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1349] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1353] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1357] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1361] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1365] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1369] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1373] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1377] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1381] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1385] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1389] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1393] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1397] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1401] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1405] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1409] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1413] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1417] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1421] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1425] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1429] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1433] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1437] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1441] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1445] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1449] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1453] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1457] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1461] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1465] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1469] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1473] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1477] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1481] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1485] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1489] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1493] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1497] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1501] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1505] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1509] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1513] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1517] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1521] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1525] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1529] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1533] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1537] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1541] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1545] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1549] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1553] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1557] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1561] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1565] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1569] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1573] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1577] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1581] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1585] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1589] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1593] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1597] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1601] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1605] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1609] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1613] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1617] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1621] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1625] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1629] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1633] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1637] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1641] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1645] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1649] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1653] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1657] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1661] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1665] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1669] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1673] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1677] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1681] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1685] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1689] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1693] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1697] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1701] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1705] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1709] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1713] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1717] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1721] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    
+[1725] "\n\t\t\n\t"     "\n\t\t\n\t"     "\n\t\t\n\t"    </code></pre>
+</div>
+</div>
+</section>
+<section id="scraping-spine-numbers-2" class="slide level2">
+<h2>Scraping Spine Numbers</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>page  <span class="sc">|&gt;</span>  </span>
+<span id="cb13-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">".g-spine"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href=""></a>  <span class="fu">html_text</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href=""></a>  <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   [1] "Spine #"    "\t\t1\t"    "\t\t2\t"    "\t\t3\t"    "\t\t4\t"   
+   [6] "\t\t5\t"    "\t\t6\t"    "\t\t7\t"    "\t\t8\t"    "\t\t9\t"   
+  [11] "\t\t10\t"   "\t\t11\t"   "\t\t12\t"   "\t\t13\t"   "\t\t14\t"  
+  [16] "\t\t15\t"   "\t\t16\t"   "\t\t17\t"   "\t\t18\t"   "\t\t19\t"  
+  [21] "\t\t20\t"   "\t\t21\t"   "\t\t22\t"   "\t\t23\t"   "\t\t24\t"  
+  [26] "\t\t25\t"   "\t\t26\t"   "\t\t27\t"   "\t\t28\t"   "\t\t29\t"  
+  [31] "\t\t30\t"   "\t\t31\t"   "\t\t32\t"   "\t\t33\t"   "\t\t34\t"  
+  [36] "\t\t35\t"   "\t\t36\t"   "\t\t37\t"   "\t\t38\t"   "\t\t39\t"  
+  [41] "\t\t40\t"   "\t\t41\t"   "\t\t42\t"   "\t\t43\t"   "\t\t44\t"  
+  [46] "\t\t45\t"   "\t\t46\t"   "\t\t47\t"   "\t\t48\t"   "\t\t49\t"  
+  [51] "\t\t50\t"   "\t\t51\t"   "\t\t52\t"   "\t\t53\t"   "\t\t54\t"  
+  [56] "\t\t55\t"   "\t\t56\t"   "\t\t57\t"   "\t\t58\t"   "\t\t59\t"  
+  [61] "\t\t60\t"   "\t\t61\t"   "\t\t62\t"   "\t\t63\t"   "\t\t64\t"  
+  [66] "\t\t65\t"   "\t\t66\t"   "\t\t67\t"   "\t\t68\t"   "\t\t69\t"  
+  [71] "\t\t70\t"   "\t\t71\t"   "\t\t72\t"   "\t\t73\t"   "\t\t74\t"  
+  [76] "\t\t75\t"   "\t\t76\t"   "\t\t77\t"   "\t\t78\t"   "\t\t79\t"  
+  [81] "\t\t80\t"   "\t\t81\t"   "\t\t82\t"   "\t\t83\t"   "\t\t84\t"  
+  [86] "\t\t85\t"   "\t\t86\t"   "\t\t87\t"   "\t\t88\t"   "\t\t88\t"  
+  [91] "\t\t89\t"   "\t\t90\t"   "\t\t91\t"   "\t\t92\t"   "\t\t93\t"  
+  [96] "\t\t94\t"   "\t\t95\t"   "\t\t96\t"   "\t\t97\t"   "\t\t98\t"  
+ [101] "\t\t99\t"   "\t\t100\t"  "\t\t101\t"  "\t\t102\t"  "\t\t103\t" 
+ [106] "\t\t104\t"  "\t\t105\t"  "\t\t106\t"  "\t\t107\t"  "\t\t108\t" 
+ [111] "\t\t109\t"  "\t\t110\t"  "\t\t111\t"  "\t\t112\t"  "\t\t113\t" 
+ [116] "\t\t114\t"  "\t\t115\t"  "\t\t116\t"  "\t\t117\t"  "\t\t118\t" 
+ [121] "\t\t119\t"  "\t\t120\t"  "\t\t121\t"  "\t\t122\t"  "\t\t123\t" 
+ [126] "\t\t124\t"  "\t\t125\t"  "\t\t126\t"  "\t\t127\t"  "\t\t128\t" 
+ [131] "\t\t129\t"  "\t\t130\t"  "\t\t131\t"  "\t\t132\t"  "\t\t133\t" 
+ [136] "\t\t134\t"  "\t\t135\t"  "\t\t136\t"  "\t\t137\t"  "\t\t138\t" 
+ [141] "\t\t139\t"  "\t\t140\t"  "\t\t141\t"  "\t\t142\t"  "\t\t143\t" 
+ [146] "\t\t144\t"  "\t\t145\t"  "\t\t146\t"  "\t\t147\t"  "\t\t148\t" 
+ [151] "\t\t149\t"  "\t\t150\t"  "\t\t151\t"  "\t\t152\t"  "\t\t153\t" 
+ [156] "\t\t154\t"  "\t\t155\t"  "\t\t156\t"  "\t\t157\t"  "\t\t158\t" 
+ [161] "\t\t159\t"  "\t\t160\t"  "\t\t161\t"  "\t\t162\t"  "\t\t163\t" 
+ [166] "\t\t164\t"  "\t\t165\t"  "\t\t166\t"  "\t\t167\t"  "\t\t168\t" 
+ [171] "\t\t169\t"  "\t\t170\t"  "\t\t171\t"  "\t\t172\t"  "\t\t173\t" 
+ [176] "\t\t174\t"  "\t\t175\t"  "\t\t176\t"  "\t\t177\t"  "\t\t178\t" 
+ [181] "\t\t179\t"  "\t\t180\t"  "\t\t181\t"  "\t\t182\t"  "\t\t183\t" 
+ [186] "\t\t184\t"  "\t\t185\t"  "\t\t186\t"  "\t\t187\t"  "\t\t188\t" 
+ [191] "\t\t189\t"  "\t\t190\t"  "\t\t191\t"  "\t\t192\t"  "\t\t193\t" 
+ [196] "\t\t194\t"  "\t\t195\t"  "\t\t196\t"  "\t\t197\t"  "\t\t198\t" 
+ [201] "\t\t199\t"  "\t\t200\t"  "\t\t201\t"  "\t\t202\t"  "\t\t203\t" 
+ [206] "\t\t204\t"  "\t\t205\t"  "\t\t206\t"  "\t\t207\t"  "\t\t208\t" 
+ [211] "\t\t209\t"  "\t\t210\t"  "\t\t211\t"  "\t\t213\t"  "\t\t214\t" 
+ [216] "\t\t215\t"  "\t\t216\t"  "\t\t217\t"  "\t\t218\t"  "\t\t219\t" 
+ [221] "\t\t220\t"  "\t\t221\t"  "\t\t222\t"  "\t\t223\t"  "\t\t224\t" 
+ [226] "\t\t225\t"  "\t\t226\t"  "\t\t227\t"  "\t\t228\t"  "\t\t229\t" 
+ [231] "\t\t230\t"  "\t\t231\t"  "\t\t232\t"  "\t\t233\t"  "\t\t234\t" 
+ [236] "\t\t235\t"  "\t\t236\t"  "\t\t237\t"  "\t\t238\t"  "\t\t239\t" 
+ [241] "\t\t240\t"  "\t\t241\t"  "\t\t242\t"  "\t\t243\t"  "\t\t244\t" 
+ [246] "\t\t245\t"  "\t\t246\t"  "\t\t247\t"  "\t\t248\t"  "\t\t249\t" 
+ [251] "\t\t250\t"  "\t\t251\t"  "\t\t252\t"  "\t\t253\t"  "\t\t254\t" 
+ [256] "\t\t255\t"  "\t\t256\t"  "\t\t257\t"  "\t\t258\t"  "\t\t259\t" 
+ [261] "\t\t260\t"  "\t\t261\t"  "\t\t262\t"  "\t\t263\t"  "\t\t264\t" 
+ [266] "\t\t265\t"  "\t\t266\t"  "\t\t267\t"  "\t\t268\t"  "\t\t269\t" 
+ [271] "\t\t270\t"  "\t\t271\t"  "\t\t272\t"  "\t\t273\t"  "\t\t274\t" 
+ [276] "\t\t275\t"  "\t\t276\t"  "\t\t277\t"  "\t\t278\t"  "\t\t279\t" 
+ [281] "\t\t280\t"  "\t\t281\t"  "\t\t282\t"  "\t\t283\t"  "\t\t284\t" 
+ [286] "\t\t285\t"  "\t\t286\t"  "\t\t287\t"  "\t\t288\t"  "\t\t289\t" 
+ [291] "\t\t290\t"  "\t\t291\t"  "\t\t292\t"  "\t\t293\t"  "\t\t294\t" 
+ [296] "\t\t295\t"  "\t\t296\t"  "\t\t297\t"  "\t\t298\t"  "\t\t299\t" 
+ [301] "\t\t300\t"  "\t\t301\t"  "\t\t302\t"  "\t\t303\t"  "\t\t304\t" 
+ [306] "\t\t305\t"  "\t\t306\t"  "\t\t307\t"  "\t\t308\t"  "\t\t309\t" 
+ [311] "\t\t310\t"  "\t\t311\t"  "\t\t312\t"  "\t\t313\t"  "\t\t314\t" 
+ [316] "\t\t315\t"  "\t\t316\t"  "\t\t317\t"  "\t\t318\t"  "\t\t319\t" 
+ [321] "\t\t320\t"  "\t\t321\t"  "\t\t322\t"  "\t\t323\t"  "\t\t324\t" 
+ [326] "\t\t325\t"  "\t\t326\t"  "\t\t327\t"  "\t\t328\t"  "\t\t329\t" 
+ [331] "\t\t330\t"  "\t\t331\t"  "\t\t332\t"  "\t\t333\t"  "\t\t334\t" 
+ [336] "\t\t335\t"  "\t\t336\t"  "\t\t337\t"  "\t\t338\t"  "\t\t339\t" 
+ [341] "\t\t340\t"  "\t\t341\t"  "\t\t342\t"  "\t\t343\t"  "\t\t344\t" 
+ [346] "\t\t345\t"  "\t\t346\t"  "\t\t347\t"  "\t\t348\t"  "\t\t349\t" 
+ [351] "\t\t350\t"  "\t\t351\t"  "\t\t352\t"  "\t\t353\t"  "\t\t354\t" 
+ [356] "\t\t355\t"  "\t\t356\t"  "\t\t357\t"  "\t\t358\t"  "\t\t359\t" 
+ [361] "\t\t360\t"  "\t\t361\t"  "\t\t362\t"  "\t\t363\t"  "\t\t364\t" 
+ [366] "\t\t365\t"  "\t\t366\t"  "\t\t367\t"  "\t\t368\t"  "\t\t369\t" 
+ [371] "\t\t370\t"  "\t\t371\t"  "\t\t372\t"  "\t\t373\t"  "\t\t374\t" 
+ [376] "\t\t375\t"  "\t\t376\t"  "\t\t377\t"  "\t\t378\t"  "\t\t379\t" 
+ [381] "\t\t380\t"  "\t\t381\t"  "\t\t382\t"  "\t\t383\t"  "\t\t384\t" 
+ [386] "\t\t385\t"  "\t\t386\t"  "\t\t387\t"  "\t\t388\t"  "\t\t389\t" 
+ [391] "\t\t390\t"  "\t\t391\t"  "\t\t392\t"  "\t\t393\t"  "\t\t394\t" 
+ [396] "\t\t395\t"  "\t\t396\t"  "\t\t397\t"  "\t\t398\t"  "\t\t399\t" 
+ [401] "\t\t400\t"  "\t\t401\t"  "\t\t402\t"  "\t\t403\t"  "\t\t404\t" 
+ [406] "\t\t405\t"  "\t\t406\t"  "\t\t407\t"  "\t\t408\t"  "\t\t409\t" 
+ [411] "\t\t410\t"  "\t\t411\t"  "\t\t412\t"  "\t\t413\t"  "\t\t414\t" 
+ [416] "\t\t415\t"  "\t\t416\t"  "\t\t417\t"  "\t\t418\t"  "\t\t419\t" 
+ [421] "\t\t420\t"  "\t\t421\t"  "\t\t422\t"  "\t\t423\t"  "\t\t424\t" 
+ [426] "\t\t425\t"  "\t\t426\t"  "\t\t427\t"  "\t\t428\t"  "\t\t429\t" 
+ [431] "\t\t430\t"  "\t\t431\t"  "\t\t432\t"  "\t\t433\t"  "\t\t434\t" 
+ [436] "\t\t435\t"  "\t\t436\t"  "\t\t437\t"  "\t\t438\t"  "\t\t439\t" 
+ [441] "\t\t440\t"  "\t\t441\t"  "\t\t442\t"  "\t\t443\t"  "\t\t444\t" 
+ [446] "\t\t445\t"  "\t\t446\t"  "\t\t447\t"  "\t\t448\t"  "\t\t449\t" 
+ [451] "\t\t450\t"  "\t\t451\t"  "\t\t452\t"  "\t\t453\t"  "\t\t454\t" 
+ [456] "\t\t455\t"  "\t\t456\t"  "\t\t457\t"  "\t\t458\t"  "\t\t459\t" 
+ [461] "\t\t460\t"  "\t\t461\t"  "\t\t462\t"  "\t\t463\t"  "\t\t464\t" 
+ [466] "\t\t465\t"  "\t\t466\t"  "\t\t467\t"  "\t\t468\t"  "\t\t469\t" 
+ [471] "\t\t470\t"  "\t\t471\t"  "\t\t472\t"  "\t\t473\t"  "\t\t474\t" 
+ [476] "\t\t475\t"  "\t\t476\t"  "\t\t477\t"  "\t\t478\t"  "\t\t479\t" 
+ [481] "\t\t480\t"  "\t\t481\t"  "\t\t482\t"  "\t\t483\t"  "\t\t484\t" 
+ [486] "\t\t485\t"  "\t\t486\t"  "\t\t487\t"  "\t\t488\t"  "\t\t489\t" 
+ [491] "\t\t490\t"  "\t\t491\t"  "\t\t492\t"  "\t\t493\t"  "\t\t494\t" 
+ [496] "\t\t495\t"  "\t\t496\t"  "\t\t497\t"  "\t\t498\t"  "\t\t499\t" 
+ [501] "\t\t500\t"  "\t\t501\t"  "\t\t502\t"  "\t\t503\t"  "\t\t504\t" 
+ [506] "\t\t505\t"  "\t\t506\t"  "\t\t507\t"  "\t\t508\t"  "\t\t509\t" 
+ [511] "\t\t510\t"  "\t\t511\t"  "\t\t512\t"  "\t\t513\t"  "\t\t514\t" 
+ [516] "\t\t515\t"  "\t\t516\t"  "\t\t517\t"  "\t\t518\t"  "\t\t519\t" 
+ [521] "\t\t520\t"  "\t\t521\t"  "\t\t522\t"  "\t\t523\t"  "\t\t524\t" 
+ [526] "\t\t525\t"  "\t\t526\t"  "\t\t527\t"  "\t\t528\t"  "\t\t529\t" 
+ [531] "\t\t530\t"  "\t\t531\t"  "\t\t532\t"  "\t\t533\t"  "\t\t534\t" 
+ [536] "\t\t535\t"  "\t\t536\t"  "\t\t537\t"  "\t\t538\t"  "\t\t539\t" 
+ [541] "\t\t540\t"  "\t\t541\t"  "\t\t542\t"  "\t\t543\t"  "\t\t544\t" 
+ [546] "\t\t545\t"  "\t\t546\t"  "\t\t547\t"  "\t\t548\t"  "\t\t549\t" 
+ [551] "\t\t550\t"  "\t\t551\t"  "\t\t552\t"  "\t\t553\t"  "\t\t554\t" 
+ [556] "\t\t555\t"  "\t\t556\t"  "\t\t557\t"  "\t\t558\t"  "\t\t559\t" 
+ [561] "\t\t560\t"  "\t\t561\t"  "\t\t562\t"  "\t\t563\t"  "\t\t564\t" 
+ [566] "\t\t565\t"  "\t\t566\t"  "\t\t567\t"  "\t\t568\t"  "\t\t569\t" 
+ [571] "\t\t570\t"  "\t\t571\t"  "\t\t572\t"  "\t\t573\t"  "\t\t574\t" 
+ [576] "\t\t575\t"  "\t\t576\t"  "\t\t577\t"  "\t\t578\t"  "\t\t579\t" 
+ [581] "\t\t580\t"  "\t\t581\t"  "\t\t582\t"  "\t\t583\t"  "\t\t584\t" 
+ [586] "\t\t585\t"  "\t\t586\t"  "\t\t587\t"  "\t\t588\t"  "\t\t589\t" 
+ [591] "\t\t590\t"  "\t\t591\t"  "\t\t592\t"  "\t\t593\t"  "\t\t594\t" 
+ [596] "\t\t595\t"  "\t\t596\t"  "\t\t597\t"  "\t\t598\t"  "\t\t599\t" 
+ [601] "\t\t600\t"  "\t\t601\t"  "\t\t602\t"  "\t\t603\t"  "\t\t604\t" 
+ [606] "\t\t605\t"  "\t\t606\t"  "\t\t607\t"  "\t\t608\t"  "\t\t609\t" 
+ [611] "\t\t610\t"  "\t\t611\t"  "\t\t612\t"  "\t\t613\t"  "\t\t614\t" 
+ [616] "\t\t615\t"  "\t\t616\t"  "\t\t617\t"  "\t\t618\t"  "\t\t619\t" 
+ [621] "\t\t620\t"  "\t\t621\t"  "\t\t622\t"  "\t\t623\t"  "\t\t624\t" 
+ [626] "\t\t625\t"  "\t\t626\t"  "\t\t627\t"  "\t\t628\t"  "\t\t629\t" 
+ [631] "\t\t630\t"  "\t\t631\t"  "\t\t632\t"  "\t\t633\t"  "\t\t634\t" 
+ [636] "\t\t635\t"  "\t\t636\t"  "\t\t637\t"  "\t\t638\t"  "\t\t639\t" 
+ [641] "\t\t640\t"  "\t\t641\t"  "\t\t642\t"  "\t\t643\t"  "\t\t644\t" 
+ [646] "\t\t645\t"  "\t\t646\t"  "\t\t647\t"  "\t\t648\t"  "\t\t649\t" 
+ [651] "\t\t650\t"  "\t\t651\t"  "\t\t652\t"  "\t\t653\t"  "\t\t654\t" 
+ [656] "\t\t655\t"  "\t\t656\t"  "\t\t657\t"  "\t\t658\t"  "\t\t659\t" 
+ [661] "\t\t660\t"  "\t\t661\t"  "\t\t662\t"  "\t\t663\t"  "\t\t664\t" 
+ [666] "\t\t665\t"  "\t\t666\t"  "\t\t667\t"  "\t\t668\t"  "\t\t669\t" 
+ [671] "\t\t670\t"  "\t\t671\t"  "\t\t672\t"  "\t\t673\t"  "\t\t674\t" 
+ [676] "\t\t675\t"  "\t\t676\t"  "\t\t677\t"  "\t\t678\t"  "\t\t679\t" 
+ [681] "\t\t680\t"  "\t\t681\t"  "\t\t682\t"  "\t\t683\t"  "\t\t684\t" 
+ [686] "\t\t685\t"  "\t\t686\t"  "\t\t687\t"  "\t\t688\t"  "\t\t689\t" 
+ [691] "\t\t690\t"  "\t\t691\t"  "\t\t692\t"  "\t\t693\t"  "\t\t694\t" 
+ [696] "\t\t695\t"  "\t\t696\t"  "\t\t697\t"  "\t\t698\t"  "\t\t699\t" 
+ [701] "\t\t700\t"  "\t\t701\t"  "\t\t702\t"  "\t\t703\t"  "\t\t704\t" 
+ [706] "\t\t705\t"  "\t\t706\t"  "\t\t707\t"  "\t\t708\t"  "\t\t709\t" 
+ [711] "\t\t710\t"  "\t\t711\t"  "\t\t712\t"  "\t\t713\t"  "\t\t714\t" 
+ [716] "\t\t715\t"  "\t\t716\t"  "\t\t717\t"  "\t\t718\t"  "\t\t719\t" 
+ [721] "\t\t720\t"  "\t\t721\t"  "\t\t722\t"  "\t\t723\t"  "\t\t724\t" 
+ [726] "\t\t725\t"  "\t\t726\t"  "\t\t727\t"  "\t\t728\t"  "\t\t729\t" 
+ [731] "\t\t730\t"  "\t\t731\t"  "\t\t732\t"  "\t\t733\t"  "\t\t734\t" 
+ [736] "\t\t735\t"  "\t\t736\t"  "\t\t737\t"  "\t\t738\t"  "\t\t739\t" 
+ [741] "\t\t740\t"  "\t\t741\t"  "\t\t742\t"  "\t\t743\t"  "\t\t744\t" 
+ [746] "\t\t745\t"  "\t\t746\t"  "\t\t747\t"  "\t\t748\t"  "\t\t749\t" 
+ [751] "\t\t750\t"  "\t\t751\t"  "\t\t752\t"  "\t\t753\t"  "\t\t754\t" 
+ [756] "\t\t755\t"  "\t\t756\t"  "\t\t757\t"  "\t\t758\t"  "\t\t759\t" 
+ [761] "\t\t760\t"  "\t\t761\t"  "\t\t762\t"  "\t\t763\t"  "\t\t764\t" 
+ [766] "\t\t765\t"  "\t\t766\t"  "\t\t767\t"  "\t\t768\t"  "\t\t769\t" 
+ [771] "\t\t770\t"  "\t\t771\t"  "\t\t772\t"  "\t\t773\t"  "\t\t774\t" 
+ [776] "\t\t775\t"  "\t\t776\t"  "\t\t777\t"  "\t\t778\t"  "\t\t779\t" 
+ [781] "\t\t780\t"  "\t\t781\t"  "\t\t782\t"  "\t\t783\t"  "\t\t784\t" 
+ [786] "\t\t785\t"  "\t\t786\t"  "\t\t787\t"  "\t\t788\t"  "\t\t789\t" 
+ [791] "\t\t790\t"  "\t\t791\t"  "\t\t792\t"  "\t\t793\t"  "\t\t794\t" 
+ [796] "\t\t795\t"  "\t\t796\t"  "\t\t797\t"  "\t\t798\t"  "\t\t799\t" 
+ [801] "\t\t800\t"  "\t\t801\t"  "\t\t802\t"  "\t\t803\t"  "\t\t804\t" 
+ [806] "\t\t805\t"  "\t\t806\t"  "\t\t807\t"  "\t\t808\t"  "\t\t809\t" 
+ [811] "\t\t810\t"  "\t\t811\t"  "\t\t812\t"  "\t\t813\t"  "\t\t814\t" 
+ [816] "\t\t815\t"  "\t\t816\t"  "\t\t817\t"  "\t\t818\t"  "\t\t819\t" 
+ [821] "\t\t820\t"  "\t\t821\t"  "\t\t822\t"  "\t\t823\t"  "\t\t824\t" 
+ [826] "\t\t825\t"  "\t\t826\t"  "\t\t827\t"  "\t\t828\t"  "\t\t829\t" 
+ [831] "\t\t830\t"  "\t\t831\t"  "\t\t832\t"  "\t\t833\t"  "\t\t834\t" 
+ [836] "\t\t835\t"  "\t\t836\t"  "\t\t837\t"  "\t\t838\t"  "\t\t839\t" 
+ [841] "\t\t840\t"  "\t\t841\t"  "\t\t842\t"  "\t\t843\t"  "\t\t844\t" 
+ [846] "\t\t845\t"  "\t\t846\t"  "\t\t847\t"  "\t\t848\t"  "\t\t849\t" 
+ [851] "\t\t850\t"  "\t\t851\t"  "\t\t852\t"  "\t\t853\t"  "\t\t854\t" 
+ [856] "\t\t855\t"  "\t\t856\t"  "\t\t857\t"  "\t\t858\t"  "\t\t859\t" 
+ [861] "\t\t860\t"  "\t\t861\t"  "\t\t862\t"  "\t\t863\t"  "\t\t864\t" 
+ [866] "\t\t865\t"  "\t\t866\t"  "\t\t867\t"  "\t\t868\t"  "\t\t869\t" 
+ [871] "\t\t870\t"  "\t\t871\t"  "\t\t872\t"  "\t\t873\t"  "\t\t874\t" 
+ [876] "\t\t875\t"  "\t\t876\t"  "\t\t877\t"  "\t\t878\t"  "\t\t879\t" 
+ [881] "\t\t880\t"  "\t\t881\t"  "\t\t882\t"  "\t\t883\t"  "\t\t884\t" 
+ [886] "\t\t885\t"  "\t\t886\t"  "\t\t887\t"  "\t\t888\t"  "\t\t889\t" 
+ [891] "\t\t890\t"  "\t\t891\t"  "\t\t892\t"  "\t\t893\t"  "\t\t894\t" 
+ [896] "\t\t895\t"  "\t\t896\t"  "\t\t897\t"  "\t\t898\t"  "\t\t899\t" 
+ [901] "\t\t900\t"  "\t\t901\t"  "\t\t902\t"  "\t\t903\t"  "\t\t904\t" 
+ [906] "\t\t905\t"  "\t\t906\t"  "\t\t907\t"  "\t\t908\t"  "\t\t909\t" 
+ [911] "\t\t910\t"  "\t\t911\t"  "\t\t912\t"  "\t\t913\t"  "\t\t914\t" 
+ [916] "\t\t915\t"  "\t\t916\t"  "\t\t917\t"  "\t\t918\t"  "\t\t919\t" 
+ [921] "\t\t920\t"  "\t\t921\t"  "\t\t922\t"  "\t\t923\t"  "\t\t924\t" 
+ [926] "\t\t925\t"  "\t\t926\t"  "\t\t927\t"  "\t\t928\t"  "\t\t929\t" 
+ [931] "\t\t930\t"  "\t\t931\t"  "\t\t932\t"  "\t\t933\t"  "\t\t934\t" 
+ [936] "\t\t935\t"  "\t\t936\t"  "\t\t937\t"  "\t\t938\t"  "\t\t939\t" 
+ [941] "\t\t940\t"  "\t\t941\t"  "\t\t942\t"  "\t\t943\t"  "\t\t944\t" 
+ [946] "\t\t945\t"  "\t\t946\t"  "\t\t947\t"  "\t\t948\t"  "\t\t949\t" 
+ [951] "\t\t950\t"  "\t\t951\t"  "\t\t952\t"  "\t\t953\t"  "\t\t954\t" 
+ [956] "\t\t955\t"  "\t\t956\t"  "\t\t957\t"  "\t\t958\t"  "\t\t959\t" 
+ [961] "\t\t960\t"  "\t\t961\t"  "\t\t962\t"  "\t\t963\t"  "\t\t964\t" 
+ [966] "\t\t965\t"  "\t\t966\t"  "\t\t967\t"  "\t\t968\t"  "\t\t969\t" 
+ [971] "\t\t970\t"  "\t\t971\t"  "\t\t972\t"  "\t\t973\t"  "\t\t974\t" 
+ [976] "\t\t975\t"  "\t\t976\t"  "\t\t977\t"  "\t\t978\t"  "\t\t979\t" 
+ [981] "\t\t980\t"  "\t\t981\t"  "\t\t982\t"  "\t\t983\t"  "\t\t984\t" 
+ [986] "\t\t985\t"  "\t\t986\t"  "\t\t987\t"  "\t\t988\t"  "\t\t989\t" 
+ [991] "\t\t990\t"  "\t\t991\t"  "\t\t992\t"  "\t\t993\t"  "\t\t994\t" 
+ [996] "\t\t995\t"  "\t\t996\t"  "\t\t997\t"  "\t\t998\t"  "\t\t999\t" 
+[1001] "\t\t1000\t" "\t\t1001\t" "\t\t1002\t" "\t\t1003\t" "\t\t1004\t"
+[1006] "\t\t1005\t" "\t\t1006\t" "\t\t1007\t" "\t\t1008\t" "\t\t1009\t"
+[1011] "\t\t1010\t" "\t\t1011\t" "\t\t1012\t" "\t\t1013\t" "\t\t1014\t"
+[1016] "\t\t1015\t" "\t\t1016\t" "\t\t1017\t" "\t\t1018\t" "\t\t1019\t"
+[1021] "\t\t1020\t" "\t\t1021\t" "\t\t1022\t" "\t\t1023\t" "\t\t1024\t"
+[1026] "\t\t1025\t" "\t\t1026\t" "\t\t1027\t" "\t\t1028\t" "\t\t1029\t"
+[1031] "\t\t1030\t" "\t\t1031\t" "\t\t1032\t" "\t\t1033\t" "\t\t1034\t"
+[1036] "\t\t1035\t" "\t\t1036\t" "\t\t1037\t" "\t\t1038\t" "\t\t1039\t"
+[1041] "\t\t1040\t" "\t\t1041\t" "\t\t1042\t" "\t\t1043\t" "\t\t1044\t"
+[1046] "\t\t1045\t" "\t\t1046\t" "\t\t1047\t" "\t\t1048\t" "\t\t1049\t"
+[1051] "\t\t1050\t" "\t\t1051\t" "\t\t1052\t" "\t\t1053\t" "\t\t1054\t"
+[1056] "\t\t1055\t" "\t\t1056\t" "\t\t1057\t" "\t\t1058\t" "\t\t1059\t"
+[1061] "\t\t1060\t" "\t\t1061\t" "\t\t1062\t" "\t\t1063\t" "\t\t1064\t"
+[1066] "\t\t1065\t" "\t\t1066\t" "\t\t1067\t" "\t\t1068\t" "\t\t1069\t"
+[1071] "\t\t1070\t" "\t\t1071\t" "\t\t1072\t" "\t\t1073\t" "\t\t1074\t"
+[1076] "\t\t1075\t" "\t\t1076\t" "\t\t1077\t" "\t\t1078\t" "\t\t1079\t"
+[1081] "\t\t1080\t" "\t\t1081\t" "\t\t1082\t" "\t\t1083\t" "\t\t1084\t"
+[1086] "\t\t1085\t" "\t\t1086\t" "\t\t1087\t" "\t\t1088\t" "\t\t1089\t"
+[1091] "\t\t1090\t" "\t\t1091\t" "\t\t1092\t" "\t\t1093\t" "\t\t1094\t"
+[1096] "\t\t1095\t" "\t\t1096\t" "\t\t1097\t" "\t\t1098\t" "\t\t1099\t"
+[1101] "\t\t1100\t" "\t\t1101\t" "\t\t1102\t" "\t\t1103\t" "\t\t1104\t"
+[1106] "\t\t1105\t" "\t\t1106\t" "\t\t1107\t" "\t\t1108\t" "\t\t1109\t"
+[1111] "\t\t1110\t" "\t\t1111\t" "\t\t1112\t" "\t\t1113\t" "\t\t1114\t"
+[1116] "\t\t1115\t" "\t\t1116\t" "\t\t1117\t" "\t\t1118\t" "\t\t1119\t"
+[1121] "\t\t1120\t" "\t\t1121\t" "\t\t1122\t" "\t\t1123\t" "\t\t1124\t"
+[1126] "\t\t1125\t" "\t\t1126\t" "\t\t1127\t" "\t\t1128\t" "\t\t1129\t"
+[1131] "\t\t1130\t" "\t\t1131\t" "\t\t1132\t" "\t\t1133\t" "\t\t1134\t"
+[1136] "\t\t1135\t" "\t\t1136\t" "\t\t1137\t" "\t\t1138\t" "\t\t1139\t"
+[1141] "\t\t1140\t" "\t\t1141\t" "\t\t1142\t" "\t\t1143\t" "\t\t1144\t"
+[1146] "\t\t1145\t" "\t\t1146\t" "\t\t1147\t" "\t\t1148\t" "\t\t1149\t"
+[1151] "\t\t1150\t" "\t\t1151\t" "\t\t1152\t" "\t\t1153\t" "\t\t1154\t"
+[1156] "\t\t1155\t" "\t\t1156\t" "\t\t1157\t" "\t\t1158\t" "\t\t1159\t"
+[1161] "\t\t1160\t" "\t\t1161\t" "\t\t1162\t" "\t\t1163\t" "\t\t1164\t"
+[1166] "\t\t1165\t" "\t\t1166\t" "\t\t1167\t" "\t\t1168\t" "\t\t1169\t"
+[1171] "\t\t1170\t" "\t\t1171\t" "\t\t1172\t" "\t\t1173\t" "\t\t1174\t"
+[1176] "\t\t1175\t" "\t\t1176\t" "\t\t1177\t" "\t\t1178\t" "\t\t1179\t"
+[1181] "\t\t1180\t" "\t\t1181\t" "\t\t1182\t" "\t\t1183\t" "\t\t1184\t"
+[1186] "\t\t1185\t" "\t\t1186\t" "\t\t1187\t" "\t\t1188\t" "\t\t1189\t"
+[1191] "\t\t1190\t" "\t\t1191\t" "\t\t1192\t" "\t\t1193\t" "\t\t1194\t"
+[1196] "\t\t1195\t" "\t\t1196\t" "\t\t1197\t" "\t\t1198\t" "\t\t1199\t"
+[1201] "\t\t1200\t" "\t\t1201\t" "\t\t1202\t" "\t\t1203\t" "\t\t1204\t"
+[1206] "\t\t1205\t" "\t\t1206\t" "\t\t1207\t" "\t\t1208\t" "\t\t1209\t"
+[1211] "\t\t1210\t" "\t\t1211\t" "\t\t1212\t" "\t\t1213\t" "\t\t1214\t"
+[1216] "\t\t1215\t" "\t\t1216\t" "\t\t1217\t" "\t\t1218\t" "\t\t1219\t"
+[1221] "\t\t1220\t" "\t\t1221\t" "\t\t1222\t" "\t\t1223\t" "\t\t1224\t"
+[1226] "\t\t1225\t" "\t\t1226\t" "\t\t1227\t" "\t\t1228\t" "\t\t1229\t"
+[1231] "\t\t1230\t" "\t\t1231\t" "\t\t1232\t" "\t\t1233\t" "\t\t1234\t"
+[1236] "\t\t1235\t" "\t\t1236\t" "\t\t1237\t" "\t\t1238\t" "\t\t1239\t"
+[1241] "\t\t1240\t" "\t\t1241\t" "\t\t1242\t" "\t\t1243\t" "\t\t1244\t"
+[1246] "\t\t1245\t" "\t\t1246\t" "\t\t1247\t" "\t\t1248\t" "\t\t1249\t"
+[1251] "\t\t1250\t" "\t\t1251\t" "\t\t1252\t" "\t\t1253\t" "\t\t1254\t"
+[1256] "\t\t1255\t" "\t\t1256\t" "\t\t1257\t" "\t\t1258\t" "\t\t1259\t"
+[1261] "\t\t1260\t" "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1266] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1271] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1276] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1281] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1286] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1291] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1296] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1301] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1306] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1311] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1316] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1321] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1326] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1331] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1336] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1341] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1346] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1351] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1356] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1361] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1366] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1371] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1376] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1381] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1386] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1391] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1396] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1401] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1406] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1411] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1416] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1421] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1426] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1431] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1436] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1441] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1446] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1451] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1456] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1461] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1466] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1471] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1476] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1481] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1486] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1491] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1496] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1501] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1506] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1511] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1516] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1521] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1526] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1531] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1536] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1541] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1546] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1551] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1556] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1561] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1566] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1571] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1576] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1581] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1586] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1591] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1596] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1601] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1606] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1611] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1616] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1621] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1626] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1631] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1636] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1641] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1646] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1651] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1656] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1661] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1666] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1671] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1676] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1681] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1686] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1691] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1696] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1701] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1706] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1711] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1716] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1721] "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"     "\t\t\t"    
+[1726] "\t\t\t"     "\t\t\t"    </code></pre>
+</div>
+</div>
+</section>
+<section id="scraping-spine-numbers-3" class="slide level2">
+<h2>Scraping Spine Numbers</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>spine <span class="ot">&lt;-</span> page  <span class="sc">|&gt;</span>  </span>
+<span id="cb15-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">".g-spine"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href=""></a>  <span class="fu">html_text</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href=""></a>  <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="scraping-titles" class="slide level2">
+<h2>Scraping Titles</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>title <span class="ot">&lt;-</span> page <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">".g-title"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href=""></a>  <span class="fu">html_text</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb16-4"><a href=""></a>  <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="scraping-directors" class="slide level2">
+<h2>Scraping Directors</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>director <span class="ot">&lt;-</span> page <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">".g-director"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href=""></a>  <span class="fu">html_text</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb17-4"><a href=""></a>  <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="scraping-years" class="slide level2">
+<h2>Scraping Years</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>year <span class="ot">&lt;-</span> page <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">".g-year"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href=""></a>  <span class="fu">html_text</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href=""></a>  <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="putting-everything-in-a-tibble" class="slide level2">
+<h2>Putting Everything in a Tibble</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>criterion <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">spine =</span> spine,</span>
+<span id="cb19-2"><a href=""></a>                    <span class="at">title =</span> title,</span>
+<span id="cb19-3"><a href=""></a>                    <span class="at">director =</span> director,</span>
+<span id="cb19-4"><a href=""></a>                    <span class="at">year =</span> year) <span class="sc">|&gt;</span> </span>
+<span id="cb19-5"><a href=""></a>  <span class="fu">slice</span>(<span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">spine =</span> <span class="fu">as.numeric</span>(spine),</span>
+<span id="cb19-7"><a href=""></a>         <span class="at">year =</span> <span class="fu">as.numeric</span>(year)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="writing-the-dataset" class="slide level2">
+<h2>Writing the Dataset</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(criterion, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/criterion.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="considerations" class="slide level2">
+<h2>Considerations</h2>
+<p>Finding data online does not grant permission to scrape and use the data</p>
+<ol type="1">
+<li class="fragment"><p>Is it ethical? Be especially mindful when using data from human subjects. Check out <a href="https://research.uci.edu/human-research-protections/">Institutional Review Board</a> for regulations on doing research with human subjects data.</p></li>
+<li class="fragment"><p>Is it legal? Check terms of use. Commercial use may not be permitted.</p></li>
+</ol>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="https://www.introdata.science/img/logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p><a href="https://introdata.science">introdata.science</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="5a-web-scrape_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="5a-web-scrape_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <!-- From: https://github.com/quarto-dev/quarto-cli/discussions/557 -->
+    <script type="text/javascript">
+      Reveal.on('ready', event => {
+        if (event.indexh === 0) {
+          document.querySelector("div.has-logo > img.slide-logo").style.display = "none";
+        }
+      });
+      Reveal.addEventListener('slidechanged', (event) => {
+        if (event.indexh === 0) {
+          Reveal.configure({ slideNumber: null });
+          document.querySelector("div.has-logo > img.slide-logo").style.display = "none";
+        }
+        if (event.indexh === 1) { 
+          Reveal.configure({ slideNumber: 'c' });
+          document.querySelector("div.has-logo > img.slide-logo").style.display = null;
+        }
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
