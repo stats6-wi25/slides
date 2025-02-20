@@ -464,6 +464,7 @@ We want to infer about **difference of two proportions**.
 | Single Proportion             | $\pi$                 | Binary                |
 | Difference of Two Proportions | $\pi_1 - \pi_2$       | Binary                |Binary                 |
 
+</div>
 
 A categorical variable with two levels is called a __binary__ variable.
 
@@ -477,7 +478,7 @@ Later on we will also learn
 |-----------------------|-----------------------|-----------------------    |
 | $\beta_1$             | Numeric               | Categorical and/or Numeric|
 
-
+</div>
 
 # Central Limit Theorem
 
