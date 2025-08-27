@@ -466,7 +466,7 @@ beep()
 More common usage. 
 
 Useful if you are going to use multiple functions from the same package.
-E.g. we have used many functions (ggplot, aes, geom_...) from the ggplot2 package. In such cases, usual practice is to put the library name in the first R chunk in the .Rmd file.
+E.g. we have used many functions (ggplot, aes, geom_...) from the ggplot2 package. In such cases, usual practice is to put the library name in the first R chunk in the .qmd file.
 
 
 
